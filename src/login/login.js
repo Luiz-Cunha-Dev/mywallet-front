@@ -69,6 +69,12 @@ button{
     border-radius: 5px;
     margin-bottom:36px;
     border: thin;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    color: #FFFFFF;
 }
 p{
     font-family: 'Raleway';
