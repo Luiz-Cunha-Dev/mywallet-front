@@ -40,7 +40,7 @@ const PaginaRegistro = styled.div`
 `
 
 const Titulo = styled.div`
-    width: 100%;
+    width: 326px;
     font-family: 'Raleway';
     font-style: normal;
     font-weight: 700;
@@ -65,7 +65,7 @@ const QuadroDeRegistros = styled.div`
 `
 
 const Opcoes = styled.div`
-    width: 100%;
+    width: 326px;
     display:flex;
     justify-content: space-between;
 
