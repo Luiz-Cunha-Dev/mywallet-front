@@ -1,17 +1,47 @@
 import React from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { useState } from "react"
+import { useNavigate } from "react-router"
 
 
-export default function Login(){
+export default function Login({setToken}){
+
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+
+    function fazerLogin(){
+        if(email !== "" && password !== ""){
+            let informaçoesDeLogin = {
+                email,
+                password
+            }
+
+            const URL = "http://localhost:5000/sign-in"
+
+            axios.post(URL, informaçoesDeLogin)
+            .then(res => {
+                console.log(res);
+                setToken(res.config.data);
+                navigate("/registro")
+            })
+            .catch(err => {
+                console.log(err.response.data)
+            })
+        }
+    }
+
     return(
         <PaginaLogin>
             <h1>MyWallet</h1>
             <form>
-                <input type="email" placeholder="E-mail"/>
-                <input type="password" placeholder="Senha" />
-                <button>Entrar</button>
+                <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}/>
+                <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}/>
             </form>
+            <button onClick={fazerLogin}>Entrar</button>
             <Link to="/cadastro">
             <p>Primeira vez? Cadastre-se!</p>
             </Link>

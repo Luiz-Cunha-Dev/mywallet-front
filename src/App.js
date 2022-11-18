@@ -5,16 +5,20 @@ import Entrada from "./registros/entrada.js";
 import Saida from "./registros/saida.js";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 function App() {
+
+  const [token, setToken] = useState();
+
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Login/>}/>
+      <Route path="/" element={<Login setToken={setToken} />}/>
       <Route path="/cadastro" element={<Cadastro/>}/>
-      <Route path="/registro" element={<Registro/>}/>
-      <Route path="/entrada" element={<Entrada/>}/>
-      <Route path="/saida" element={<Saida/>}/>
+      <Route path="/registro" element={<Registro token={token}/>}/>
+      <Route path="/entrada" element={<Entrada token={token}/>}/>
+      <Route path="/saida" element={<Saida token={token}/>}/>
     </Routes>
     </BrowserRouter>
   );

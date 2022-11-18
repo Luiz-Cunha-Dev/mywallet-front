@@ -1,19 +1,52 @@
 import React from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { useState } from "react"
+import { useNavigate } from "react-router"
 
 
 export default function Cadastro(){
+
+    const navigate = useNavigate()
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordTwo, setPasswordTwo] = useState("");
+
+
+    function cadastrar(){
+        if(name !== "" && email !== "" && password !== "" && password === passwordTwo){
+            let informaçoesDeCadastro = {
+                name,
+                email,
+                password
+            }
+
+            const URL = "http://localhost:5000/sign-up"
+
+            axios.post(URL, informaçoesDeCadastro)
+            .then(res => {
+                console.log(res.data)
+                alert("Cadastrado com sucesso!")
+                navigate("/")
+            })
+            .catch(err => {
+                alert(err.response.data)
+            })
+        }
+    }
+
     return(
         <PaginaCadastro>
             <h1>MyWallet</h1>
             <form>
-                <input type="name" placeholder="Nome"/>
-                <input type="email" placeholder="E-mail"/>
-                <input type="password" placeholder="Senha" />
-                <input type="password" placeholder="Confirme a senha" />
-                <button>Cadastrar</button>
+                <input type="name" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}/>
+                <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}/>
+                <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}/>
+                <input type="password" placeholder="Confirme a senha" value={passwordTwo} onChange={e => setPasswordTwo(e.target.value)}/>
             </form>
+            <button onClick={cadastrar}>Cadastrar</button>
             <Link to="/">
             <p>Já tem uma conta? Entre agora!</p>
             </Link>
