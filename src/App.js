@@ -11,8 +11,9 @@ import { useState } from "react";
 
 function App() {
   const tokenLocal = JSON.parse(localStorage.getItem("tokenLocal"));
+  const nomeLocal = JSON.parse(localStorage.getItem("nomeLocal"));
   const [token, setToken] = useState(tokenLocal);
-  const [nomeUsuario, setNomeUsuario] = useState("Fulano");
+  const [nomeUsuario, setNomeUsuario] = useState(nomeLocal);
 
   return (
     <BrowserRouter>

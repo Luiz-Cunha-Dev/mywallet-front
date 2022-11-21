@@ -26,6 +26,8 @@ export default function Login({setToken, setNomeUsuario}){
             .then(res => {
                 localStorage.removeItem("tokenLocal");
                 localStorage.setItem("tokenLocal", JSON.stringify(res.data.token));
+                localStorage.removeItem("nomeLocal");
+                localStorage.setItem("nomeLocal", JSON.stringify(res.data.name));
                 setToken(res.data.token);
                 setNomeUsuario(res.data.name);
                 navigate("/registro")
