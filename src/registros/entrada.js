@@ -23,7 +23,6 @@ export default function Entrada({token}){
             const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
             axios.post(URL,{value, title, date: data}, config)
             .then(res => {
-                console.log(res);
                 navigate("/registro")
             })
             .catch(err => {

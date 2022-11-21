@@ -27,7 +27,7 @@ export default function AtualizarSaida({token}){
                 setValue(-Number(registro[0].value));
             })
             .catch(err => {
-                console.log(err);
+                alert(err);
             })
     }, [])
 
@@ -36,7 +36,6 @@ export default function AtualizarSaida({token}){
             const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/registro/${idRegistro}`
             axios.put(URL,{value: -value, title}, config)
             .then(res => {
-                console.log(res);
                 navigate("/registro")
             })
             .catch(err => {

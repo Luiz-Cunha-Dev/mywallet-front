@@ -27,7 +27,6 @@ export default function Cadastro(){
 
             axios.post(URL, informaçoesDeCadastro)
             .then(res => {
-                console.log(res.data)
                 alert("Cadastrado com sucesso!")
                 navigate("/")
             })

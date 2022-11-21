@@ -27,7 +27,7 @@ export default function Registro({ token, nomeUsuario }) {
                 .then(res => {
                 })
                 .catch(err => {
-                    console.log(err);
+                    alert(err);
                 })
         }, 5000);
     }, [])
@@ -63,7 +63,6 @@ export default function Registro({ token, nomeUsuario }) {
 
             axios.delete(URL, config)
                 .then(res => {
-                    console.log(res);
                     carregarRegistros()
                 })
                 .catch(err => {
@@ -138,7 +137,7 @@ function Item(props) {
     return (
         <EstiloItens cor={props.sinal < 0 ? "#C70000" : "#03AC00"} >
             <p><span>{props.date}</span>
-                <EstiloLink to={props.value > 0 ? `/atualizar-entrada/${props.id}` : `/atualizar-saida/${props.id}`} >
+                <EstiloLink to={props.sinal > 0 ? `/atualizar-entrada/${props.id}` : `/atualizar-saida/${props.id}`} >
                     <span>{props.title}</span>
                 </EstiloLink>
             </p>
@@ -314,6 +313,7 @@ const EstiloItens = styled.p`
 ;
     }
 `
+
 const EstiloLink = styled(Link)`
     span{
         font-family: 'Raleway';

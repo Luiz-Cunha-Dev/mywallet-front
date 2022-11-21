@@ -28,7 +28,7 @@ export default function AtualizarEntrada({token}){
                 setValue(Number(registro[0].value));
             })
             .catch(err => {
-                console.log(err);
+                alert(err);
             })
     }, [])    
 
