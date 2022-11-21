@@ -20,10 +20,6 @@ export default function Registro({ token, nomeUsuario }) {
     }, [])
 
     useEffect(() => {
-        carregarRegistros()
-    }, [])
-
-    useEffect(() => {
         const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/status"
 
         setInterval(() => {
@@ -33,8 +29,7 @@ export default function Registro({ token, nomeUsuario }) {
                 .catch(err => {
                     console.log(err);
                 })
-        }, 5000)
-
+        }, 5000);
     }, [])
 
     useEffect(() => {
@@ -63,6 +58,7 @@ export default function Registro({ token, nomeUsuario }) {
 
             axios.delete(URL, config)
                 .then(res => {
+                    console.log(res);
                     carregarRegistros()
                 })
                 .catch(err => {

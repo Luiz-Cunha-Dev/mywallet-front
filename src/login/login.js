@@ -24,11 +24,11 @@ export default function Login({setToken, setNomeUsuario}){
 
             axios.post(URL, informaçoesDeLogin)
             .then(res => {
-                setToken(res.data.token);
-                setNomeUsuario(res.data.name)
-                navigate("/registro")
                 localStorage.removeItem("tokenLocal");
-                localStorage.setItem("tokenLocal", JSON.stringify(res.data));
+                localStorage.setItem("tokenLocal", JSON.stringify(res.data.token));
+                setToken(res.data.token);
+                setNomeUsuario(res.data.name);
+                navigate("/registro")
             })
             .catch(err => {
                 alert(err.response.data)
