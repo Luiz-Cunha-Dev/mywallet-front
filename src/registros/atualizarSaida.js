@@ -1,11 +1,12 @@
 import React from "react"
 import styled from "styled-components"
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 
 export default function AtualizarSaida({token}){
+    const {idRegistro} = useParams();
     const navigate = useNavigate();
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
@@ -14,13 +15,11 @@ export default function AtualizarSaida({token}){
             Authorization: `Bearer ${token}`
         }
     };
-    const currentDate = new Date();
-    const data= currentDate.toLocaleDateString().slice(0,5);
 
     function salvarSaida(){
         if(value !== "" && title !== ""){
-            const URL = "http://localhost:5000/registro"
-            axios.post(URL,{value: -value, title, date: data}, config)
+            const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/registro/${idRegistro}`
+            axios.put(URL,{value: -value, title}, config)
             .then(res => {
                 console.log(res);
                 navigate("/registro")
@@ -31,6 +30,7 @@ export default function AtualizarSaida({token}){
             })
         }
     }
+
     return(
         <PaginaSaida>
             <h1>Editar saída</h1>

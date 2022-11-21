@@ -23,7 +23,7 @@ export default function Cadastro(){
                 password
             }
 
-            const URL = "http://localhost:5000/sign-up"
+            const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/sign-up"
 
             axios.post(URL, informaçoesDeCadastro)
             .then(res => {

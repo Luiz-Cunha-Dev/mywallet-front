@@ -20,7 +20,7 @@ export default function Entrada({token}){
 
     function salvarEntrada(){
         if(value !== "" && title !== ""){
-            const URL = "http://localhost:5000/registro"
+            const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
             axios.post(URL,{value, title, date: data}, config)
             .then(res => {
                 console.log(res);

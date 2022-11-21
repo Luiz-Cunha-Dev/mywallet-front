@@ -3,6 +3,8 @@ import Cadastro from "./login/cadastro.js";
 import Registro from "./registros/registro.js";
 import Entrada from "./registros/entrada.js";
 import Saida from "./registros/saida.js";
+import AtualizarEntrada from "./registros/atualizarEntrada.js";
+import AtualizarSaida from "./registros/atualizarSaida.js";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
@@ -19,6 +21,8 @@ function App() {
       <Route path="/registro" element={<Registro token={token}/>}/>
       <Route path="/entrada" element={<Entrada token={token}/>}/>
       <Route path="/saida" element={<Saida token={token}/>}/>
+      <Route path="/atualizar-entrada/:idRegistro" element={<AtualizarEntrada token={token}/>}/>
+      <Route path="/atualizar-saida/:idRegistro" element={<AtualizarSaida token={token}/>}/>
     </Routes>
     </BrowserRouter>
   );

@@ -20,7 +20,7 @@ export default function Login({setToken}){
                 password
             }
 
-            const URL = "http://localhost:5000/sign-in"
+            const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/sign-in"
 
             axios.post(URL, informaçoesDeLogin)
             .then(res => {
