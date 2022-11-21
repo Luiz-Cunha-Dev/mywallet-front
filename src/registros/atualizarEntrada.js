@@ -91,6 +91,13 @@ input{
     border-radius: 5px;
     margin-bottom: 13px;
     border: thin;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+    padding-left: 15px;
     ::placeholder{
         font-family: 'Raleway';
         font-style: normal;
@@ -98,7 +105,6 @@ input{
         font-size: 20px;
         line-height: 23px;
         color: #000000;
-        padding-left: 15px;
     }
 }
 button{

@@ -36,8 +36,13 @@ export default function Registro({ token, nomeUsuario }) {
         let soma = 0;
         let registros = listaDeRegistros;
         registros.forEach(r => soma = soma + Number(r.value))
+        soma = arredondar(soma).replace(".", ",")
         setSaldo(soma)
     }, [listaDeRegistros])
+
+    function arredondar(n) {
+        return (Math.round(n * 100) / 100).toFixed(2);
+    }
 
     function carregarRegistros() {
         const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
@@ -97,7 +102,7 @@ export default function Registro({ token, nomeUsuario }) {
                     <b>Não há registros de<br />entrada ou saída</b>
                     :
                     <>
-                        {listaDeRegistros.map((i, index) => <Item key={index} date={i.date} title={i.title} value={i.value} deletar={() => apagarRegistro(i._id)} id={i._id} />)}
+                        {listaDeRegistros.map((i, index) => <Item key={index} date={i.date} title={i.title} sinal={i.value} value={arredondar(i.value).replace(".", ",")} deletar={() => apagarRegistro(i._id)} id={i._id} />)}
                     </>
                 }
             </QuadroDeRegistros>
@@ -131,7 +136,7 @@ export default function Registro({ token, nomeUsuario }) {
 
 function Item(props) {
     return (
-        <EstiloItens cor={props.value < 0 ? "#C70000" : "#03AC00"} >
+        <EstiloItens cor={props.sinal < 0 ? "#C70000" : "#03AC00"} >
             <p><span>{props.date}</span>
                 <EstiloLink to={props.value > 0 ? `/atualizar-entrada/${props.id}` : `/atualizar-saida/${props.id}`} >
                     <span>{props.title}</span>
@@ -179,13 +184,13 @@ const Titulo = styled.div`
 
 const QuadroDeRegistros = styled.div`
     width: 326px;
-    height: 446px;
+    height: 455px;
     background: #FFFFFF;
     border-radius: 5px;
     position: relative;
     padding-left: 12px;
     padding-right: 11px;
-    padding-top: 23px;
+    padding-top: 20px;
     overflow: scroll;
     padding-bottom: 30px;
     b{
@@ -211,11 +216,12 @@ const Saldo = styled.div`
     display: flex;
     justify-content: space-between;
     padding-left: 15px;
-    padding-right: 10px;
+    padding-right: 11px;
     background-color: #ffffff;
     z-index: 1;
     align-items: center;
     border-radius: 5px;
+    padding-bottom: 3px;
     span{
         width: auto;
         font-family: 'Raleway';
@@ -272,7 +278,7 @@ const Opcoes = styled.div`
 const EstiloItens = styled.p`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 19px;
 
         span{
         font-family: 'Raleway';
