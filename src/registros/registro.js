@@ -1,11 +1,75 @@
 import React from "react"
 import styled from "styled-components"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import axios from "axios"
 
 
-export default function Registro(){
+export default function Registro({token}){
     const [listaDeRegistros, setListaDeRegistros] = useState([]);
+    const [saldo, setSaldo] = useState(0);
+    const config = {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+
+
+    useEffect( () => {
+        carregarRegistros()
+    } , [])
+
+    function carregarRegistros(){
+        const URL = "http://localhost:5000/registro"
+
+        axios.get(URL, config)
+        .then(res => {
+            console.log(res);
+            setListaDeRegistros(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        const URL = "http://localhost:5000/status"
+
+        setInterval(() => {
+            axios.post(URL,{}, config)
+            .then(res => {
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }, 5000)
+
+    }, [])
+
+    useEffect( () => {
+        let soma = 0;
+        let registros = listaDeRegistros;
+        registros.forEach(r => soma = soma + Number(r.value) )
+        setSaldo(soma)
+    } , [listaDeRegistros])
+
+    function apagarRegistro(id){
+        let confirmacao = window.confirm("Tem certeza que deseja apagar esse registro?")
+        if(confirmacao){
+            const URL = `http://localhost:5000/registro/${id}`
+
+            axios.delete(URL, config)
+            .then(res => {
+                console.log(res);
+                carregarRegistros()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+
+    }
 
     return(
         <PaginaRegistro>
@@ -14,39 +78,48 @@ export default function Registro(){
             <ion-icon name="exit-outline"></ion-icon>
             </Titulo>
 
-            <QuadroDeRegistros>
+            <QuadroDeRegistros cor={saldo < 0 ? "#C70000" : "#03AC00"}>
                 {listaDeRegistros.length === 0 
                 ? 
                 <b>Não há registros de<br/>entrada ou saída</b>
                 :
                 <>
-                {listaDeRegistros.map(i => <Item/>)}
+                {listaDeRegistros.map((i, index) => <Item key={index} date={i.date} title={i.title} value={i.value} deletar={() => apagarRegistro(i._id)}/>)}
                 <div>
                     <span>Saldo</span>
-                    <span>2849,96</span>
+                    <span>{saldo < 0 ? saldo*-1 : saldo}</span>
                 </div>
                 </>
             }
             </QuadroDeRegistros>
 
             <Opcoes>
+                <Link to="/entrada">
                 <button>
                     <p>Nova<br/>entrada</p>
                 <ion-icon name="add-circle-outline"></ion-icon>
                 </button>
+                </Link>
+                <Link to="/saida">
                 <button>
                     <p>Nova<br/>saída</p>                   
                 <ion-icon name="remove-circle-outline"></ion-icon>
-                    </button>
+                </button>
+                </Link>
+
             </Opcoes>
         </PaginaRegistro>
     )
 }
 
-function Item(){
+function Item(props){
     return(
-        <EstiloItens>
-    <span>30/11</span><span>Almoço mãe</span><span>39,90</span>
+        <EstiloItens cor={props.value < 0 ? "#C70000" : "#03AC00"} >
+            <p><span>{props.date}</span><span>{props.title}</span></p>
+            <p>
+            <span>{props.value < 0 ? props.value*-1 : props.value}</span>
+            <button onClick={props.deletar}>x</button>
+            </p>
         </EstiloItens>
 
     )
@@ -133,7 +206,7 @@ const QuadroDeRegistros = styled.div`
         font-size: 17px;
         line-height: 20px;
         text-align: right;
-        color: #03AC00;
+        color: ${props => props.cor};
     }
 }
 
@@ -177,13 +250,14 @@ const EstiloItens = styled.p`
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-    span:nth-child(1){
+        span:nth-child(1){
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
         line-height: 19px;
         color: #C6C6C6;
+        margin-right: 10px;
     }
     span:nth-child(2){
         font-family: 'Raleway';
@@ -192,15 +266,29 @@ const EstiloItens = styled.p`
         font-size: 16px;
         line-height: 19px;
         color: #000000;
-        margin-left: -110px;
     }
-    span:nth-child(3){
-        font-family: 'Raleway';
+    p:nth-child(2){
+        span{
+            font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
         line-height: 19px;
         text-align: right;
-        color: #C70000;
+        color: ${props => props.cor};
+        }
+    }
+
+    button{
+        border: thin;
+        background-color: #ffffff;
+        color: #C6C6C6;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+;
     }
 `

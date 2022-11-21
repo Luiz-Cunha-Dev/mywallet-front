@@ -8,8 +8,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 function App() {
-
-  const [token, setToken] = useState();
+  const tokenLocal = JSON.parse(localStorage.getItem("tokenLocal"));
+  const [token, setToken] = useState(tokenLocal);
 
   return (
     <BrowserRouter>

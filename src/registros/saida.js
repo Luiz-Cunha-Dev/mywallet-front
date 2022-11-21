@@ -1,17 +1,44 @@
 import React from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
-export default function Saida(){
+export default function Saida({token}){
+    const navigate = useNavigate();
+    const [value, setValue] = useState("");
+    const [title, setTitle] = useState("");
+    const config = {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }
+    };
+    const currentDate = new Date();
+    const data= currentDate.toLocaleDateString().slice(0,5);
+
+    function salvarSaida(){
+        if(value !== "" && title !== ""){
+            const URL = "http://localhost:5000/registro"
+            axios.post(URL,{value: -value, title, date: data}, config)
+            .then(res => {
+                console.log(res);
+                navigate("/registro")
+            })
+            .catch(err => {
+                console.log(value);
+                console.log(err);
+            })
+        }
+    }
     return(
         <PaginaSaida>
             <h1>Nova saída</h1>
             <form>
-                <input type="number" placeholder="Valor"/>
-                <input type="text" placeholder="Descrição" />
-                <button>Salvar saída</button>
+                <input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}/>
+                <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)} />
             </form>
+            <button onClick={salvarSaida}>Salvar saída</button>
         </PaginaSaida>
     )
 }

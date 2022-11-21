@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-export default function Entrada({token}){
+export default function AtualizarEntrada({token}){
     const navigate = useNavigate();
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
@@ -35,12 +35,12 @@ export default function Entrada({token}){
 
     return(
         <PaginaEntrada>
-            <h1>Nova entrada</h1>
+            <h1>Editar entrada</h1>
             <form>
                 <input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}/>
                 <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)}/>
             </form>
-            <button onClick={salvarEntrada}>Salvar entrada</button>
+            <button onClick={salvarEntrada}>Atualizar entrada</button>
         </PaginaEntrada>
     )
 }

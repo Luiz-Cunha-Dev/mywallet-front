@@ -25,8 +25,10 @@ export default function Login({setToken}){
             axios.post(URL, informaçoesDeLogin)
             .then(res => {
                 console.log(res);
-                setToken(res.config.data);
+                setToken(res.data);
                 navigate("/registro")
+                localStorage.removeItem("tokenLocal");
+                localStorage.setItem("tokenLocal", JSON.stringify(res.data));
             })
             .catch(err => {
                 console.log(err.response.data)

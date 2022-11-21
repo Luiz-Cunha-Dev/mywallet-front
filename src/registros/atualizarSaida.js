@@ -1,12 +1,11 @@
 import React from "react"
 import styled from "styled-components"
-import { useState } from "react"
-import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
-
-export default function Entrada({token}){
+export default function AtualizarSaida({token}){
     const navigate = useNavigate();
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
@@ -18,10 +17,10 @@ export default function Entrada({token}){
     const currentDate = new Date();
     const data= currentDate.toLocaleDateString().slice(0,5);
 
-    function salvarEntrada(){
+    function salvarSaida(){
         if(value !== "" && title !== ""){
             const URL = "http://localhost:5000/registro"
-            axios.post(URL,{value, title, date: data}, config)
+            axios.post(URL,{value: -value, title, date: data}, config)
             .then(res => {
                 console.log(res);
                 navigate("/registro")
@@ -32,20 +31,19 @@ export default function Entrada({token}){
             })
         }
     }
-
     return(
-        <PaginaEntrada>
-            <h1>Nova entrada</h1>
+        <PaginaSaida>
+            <h1>Editar saída</h1>
             <form>
                 <input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}/>
-                <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)}/>
+                <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)} />
             </form>
-            <button onClick={salvarEntrada}>Salvar entrada</button>
-        </PaginaEntrada>
+            <button onClick={salvarSaida}>Atualizar saída</button>
+        </PaginaSaida>
     )
 }
 
-const PaginaEntrada = styled.div`
+const PaginaSaida = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -68,7 +66,7 @@ h1{
     font-size: 26px;
     line-height: 31px;
     color: #FFFFFF;
-    margin-left: -155px;
+    margin-left: -185px;
     margin-bottom: 40px;
 }
 input{
