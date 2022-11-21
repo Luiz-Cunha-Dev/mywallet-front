@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
 
@@ -16,6 +16,21 @@ export default function AtualizarSaida({token}){
         }
     };
 
+    useEffect(() => {
+        const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
+
+        axios.get(URL, config)
+            .then(res => {
+                const listaDeRegistros = res.data;
+                const registro = listaDeRegistros.filter(r => r._id === idRegistro);
+                setTitle(registro[0].title);
+                setValue(-Number(registro[0].value));
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
+
     function salvarSaida(){
         if(value !== "" && title !== ""){
             const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/registro/${idRegistro}`
@@ -25,8 +40,7 @@ export default function AtualizarSaida({token}){
                 navigate("/registro")
             })
             .catch(err => {
-                console.log(value);
-                console.log(err);
+                alert(err.response.data);
             })
         }
     }

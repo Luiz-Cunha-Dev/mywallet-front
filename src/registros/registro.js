@@ -5,8 +5,8 @@ import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 
 
-export default function Registro({ token }) {
-    const navigate = useNavigate()
+export default function Registro({ token, nomeUsuario }) {
+    const navigate = useNavigate();
     const [listaDeRegistros, setListaDeRegistros] = useState([]);
     const [saldo, setSaldo] = useState(0);
     const config = {
@@ -19,18 +19,9 @@ export default function Registro({ token }) {
         carregarRegistros()
     }, [])
 
-    function carregarRegistros() {
-        const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
-
-        axios.get(URL, config)
-            .then(res => {
-                console.log(res);
-                setListaDeRegistros(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
+    useEffect(() => {
+        carregarRegistros()
+    }, [])
 
     useEffect(() => {
         const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/status"
@@ -53,6 +44,18 @@ export default function Registro({ token }) {
         setSaldo(soma)
     }, [listaDeRegistros])
 
+    function carregarRegistros() {
+        const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/registro"
+
+        axios.get(URL, config)
+            .then(res => {
+                setListaDeRegistros(res.data);
+            })
+            .catch(err => {
+                alert(err.response.data)
+            })
+    }
+
     function apagarRegistro(id) {
         let confirmacao = window.confirm("Tem certeza que deseja apagar esse registro?")
         if (confirmacao) {
@@ -60,11 +63,10 @@ export default function Registro({ token }) {
 
             axios.delete(URL, config)
                 .then(res => {
-                    console.log(res);
                     carregarRegistros()
                 })
                 .catch(err => {
-                    console.log(err);
+                    alert(err.response.data)
                 })
         }
 
@@ -77,11 +79,11 @@ export default function Registro({ token }) {
 
             axios.delete(URL, config)
                 .then(res => {
-                    console.log(res);
+                    localStorage.removeItem("tokenLocal");
                     navigate("/")
                 })
                 .catch(err => {
-                    console.log(err);
+                    alert(err.response.data);
                 })
         }
     }
@@ -89,7 +91,7 @@ export default function Registro({ token }) {
     return (
         <PaginaRegistro>
             <Titulo>
-                Olá, Fulano
+                Olá, {nomeUsuario}
                 <ion-icon name="exit-outline" onClick={Deslogar}></ion-icon>
             </Titulo>
 
@@ -139,7 +141,6 @@ function Item(props) {
                     <span>{props.title}</span>
                 </EstiloLink>
             </p>
-            
             <p>
                 <span>{props.value < 0 ? props.value * -1 : props.value}</span>
                 <button onClick={props.deletar}>x</button>

@@ -27,8 +27,7 @@ export default function Entrada({token}){
                 navigate("/registro")
             })
             .catch(err => {
-                console.log(value);
-                console.log(err);
+                alert(err.response.data)
             })
         }
     }

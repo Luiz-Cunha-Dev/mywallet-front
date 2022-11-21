@@ -26,11 +26,11 @@ export default function Saida({token}){
                 navigate("/registro")
             })
             .catch(err => {
-                console.log(value);
-                console.log(err);
+                alert(err.response.data)
             })
         }
     }
+    
     return(
         <PaginaSaida>
             <h1>Nova saída</h1>

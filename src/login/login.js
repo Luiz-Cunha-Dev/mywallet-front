@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 
 
-export default function Login({setToken}){
+export default function Login({setToken, setNomeUsuario}){
 
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
@@ -24,14 +24,14 @@ export default function Login({setToken}){
 
             axios.post(URL, informaçoesDeLogin)
             .then(res => {
-                console.log(res);
-                setToken(res.data);
+                setToken(res.data.token);
+                setNomeUsuario(res.data.name)
                 navigate("/registro")
                 localStorage.removeItem("tokenLocal");
                 localStorage.setItem("tokenLocal", JSON.stringify(res.data));
             })
             .catch(err => {
-                console.log(err.response.data)
+                alert(err.response.data)
             })
         }
     }

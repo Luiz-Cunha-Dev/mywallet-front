@@ -12,13 +12,14 @@ import { useState } from "react";
 function App() {
   const tokenLocal = JSON.parse(localStorage.getItem("tokenLocal"));
   const [token, setToken] = useState(tokenLocal);
+  const [nomeUsuario, setNomeUsuario] = useState("Fulano");
 
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Login setToken={setToken} />}/>
+      <Route path="/" element={<Login setToken={setToken} setNomeUsuario={setNomeUsuario} />}/>
       <Route path="/cadastro" element={<Cadastro/>}/>
-      <Route path="/registro" element={<Registro token={token}/>}/>
+      <Route path="/registro" element={<Registro token={token} nomeUsuario={nomeUsuario}/>}/>
       <Route path="/entrada" element={<Entrada token={token}/>}/>
       <Route path="/saida" element={<Saida token={token}/>}/>
       <Route path="/atualizar-entrada/:idRegistro" element={<AtualizarEntrada token={token}/>}/>
