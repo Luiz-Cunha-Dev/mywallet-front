@@ -15,6 +15,7 @@ export default function Registro({ token, nomeUsuario }) {
         }
     };
 
+
     useEffect(() => {
         carregarRegistros()
     }, [])
@@ -22,21 +23,25 @@ export default function Registro({ token, nomeUsuario }) {
     useEffect(() => {
         const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/status"
 
-        setInterval(() => {
+        const interval = setInterval(() => {
             axios.post(URL, {}, config)
                 .then(res => {
                 })
                 .catch(err => {
-                    alert(err);
+                    alert("Sua sessão expirou!");
+                    navigate("/")
                 })
         }, 5000);
+
+        return () => clearInterval(interval);
+
     }, [])
 
     useEffect(() => {
         let soma = 0;
         let registros = listaDeRegistros;
         registros.forEach(r => soma = soma + Number(r.value))
-        soma = arredondar(soma).replace(".", ",")
+        soma = arredondar(soma)
         setSaldo(soma)
     }, [listaDeRegistros])
 
@@ -72,7 +77,8 @@ export default function Registro({ token, nomeUsuario }) {
 
     }
 
-    function Deslogar() {
+    function deslogar() {
+
         let confirmacao = window.confirm("Tem certeza que deseja sair?")
         if (confirmacao) {
             const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/sessao`
@@ -92,7 +98,7 @@ export default function Registro({ token, nomeUsuario }) {
         <PaginaRegistro>
             <Titulo>
                 Olá, {nomeUsuario}
-                <ion-icon name="exit-outline" onClick={Deslogar}></ion-icon>
+                <ion-icon name="exit-outline" onClick={deslogar}></ion-icon>
             </Titulo>
 
             <QuadroDeRegistros >
@@ -101,7 +107,7 @@ export default function Registro({ token, nomeUsuario }) {
                     <b>Não há registros de<br />entrada ou saída</b>
                     :
                     <>
-                        {listaDeRegistros.map((i, index) => <Item key={index} date={i.date} title={i.title} sinal={i.value} value={arredondar(i.value).replace(".", ",")} deletar={() => apagarRegistro(i._id)} id={i._id} />)}
+                        {listaDeRegistros.map((i, index) => <Item key={index} date={i.date} title={i.title} sinal={i.value} value={arredondar(i.value)} deletar={() => apagarRegistro(i._id)} id={i._id} />)}
                     </>
                 }
             </QuadroDeRegistros>
@@ -111,7 +117,7 @@ export default function Registro({ token, nomeUsuario }) {
                 :
                 <Saldo cor={saldo < 0 ? "#C70000" : "#03AC00"}>
                     <span>Saldo</span>
-                    <span>{saldo < 0 ? saldo * -1 : saldo}</span>
+                    <span>{saldo < 0 ? (saldo*-1).toFixed(2)  : saldo}</span>
                 </Saldo>
             }
             <Opcoes>
@@ -142,7 +148,7 @@ function Item(props) {
                 </EstiloLink>
             </p>
             <p>
-                <span>{props.value < 0 ? props.value * -1 : props.value}</span>
+                <span>{props.value < 0 ? (props.value * -1).toFixed(2) : props.value}</span>
                 <button onClick={props.deletar}>x</button>
             </p>
         </EstiloItens>

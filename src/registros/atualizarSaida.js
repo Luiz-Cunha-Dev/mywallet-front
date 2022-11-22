@@ -3,13 +3,14 @@ import styled from "styled-components"
 import { useState } from "react";
 import { useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function AtualizarSaida({token}){
     const {idRegistro} = useParams();
     const navigate = useNavigate();
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
+    const [botao, setBotao] = useState("Atualizar saída");
     const config = {
         headers:{
             Authorization: `Bearer ${token}`
@@ -31,16 +32,49 @@ export default function AtualizarSaida({token}){
             })
     }, [])
 
+    useEffect(() => {
+        const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/status"
+
+        const interval = setInterval(() => {
+            axios.post(URL, {}, config)
+                .then(res => {
+                })
+                .catch(err => {
+                    alert("Sua sessão expirou!");
+                    navigate("/");
+                })
+        }, 5000);
+
+        return () => clearInterval(interval);
+
+    }, [])
+
     function salvarSaida(){
+        setBotao(<ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="white"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+        />)
+
         if(value !== "" && title !== ""){
             const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/registro/${idRegistro}`
             axios.put(URL,{value: -value, title}, config)
             .then(res => {
                 navigate("/registro")
+                setBotao("Atualizar saída");
             })
             .catch(err => {
                 alert(err.response.data);
+                setBotao("Atualizar saída");
             })
+        }else{
+            alert("Todos os campos são necessarios!")
+            setBotao("Atualizar saída");
         }
     }
 
@@ -51,7 +85,7 @@ export default function AtualizarSaida({token}){
                 <input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}/>
                 <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)} />
             </form>
-            <button onClick={salvarSaida}>Atualizar saída</button>
+            <button onClick={salvarSaida}>{botao}</button>
         </PaginaSaida>
     )
 }
@@ -118,5 +152,8 @@ button{
     font-size: 20px;
     line-height: 23px;
     color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 `

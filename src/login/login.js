@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function Login({setToken, setNomeUsuario}){
@@ -11,6 +12,7 @@ export default function Login({setToken, setNomeUsuario}){
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [botaoLogar, setBotaoLogar] = useState("Entrar");
 
 
     function fazerLogin(){
@@ -19,6 +21,17 @@ export default function Login({setToken, setNomeUsuario}){
                 email,
                 password
             }
+
+            setBotaoLogar(<ThreeDots
+                height="80"
+                width="80"
+                radius="9"
+                color="white"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClassName=""
+                visible={true}
+            />)
 
             const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/sign-in"
 
@@ -31,10 +44,15 @@ export default function Login({setToken, setNomeUsuario}){
                 setToken(res.data.token);
                 setNomeUsuario(res.data.name);
                 navigate("/registro")
+                setBotaoLogar("Entrar")
             })
             .catch(err => {
                 alert(err.response.data)
+                setBotaoLogar("Entrar")
             })
+        }else{
+            alert("Todos os campos são necessarios!")
+            setBotaoLogar("Entrar");
         }
     }
 
@@ -45,7 +63,7 @@ export default function Login({setToken, setNomeUsuario}){
                 <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}/>
                 <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}/>
             </form>
-            <button onClick={fazerLogin}>Entrar</button>
+            <button onClick={fazerLogin}>{botaoLogar}</button>
             <Link to="/cadastro">
             <p>Primeira vez? Cadastre-se!</p>
             </Link>
@@ -100,7 +118,6 @@ input{
         font-size: 20px;
         line-height: 23px;
         color: #000000;
-        padding-left: 15px;
     }
 }
 button{
@@ -116,6 +133,9 @@ button{
     font-size: 20px;
     line-height: 23px;
     color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 p{
     font-family: 'Raleway';

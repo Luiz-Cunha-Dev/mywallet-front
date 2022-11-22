@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function Cadastro(){
@@ -13,9 +14,20 @@ export default function Cadastro(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordTwo, setPasswordTwo] = useState("");
-
+    const [botao, setBotao] = useState("Cadastrar");
 
     function cadastrar(){
+        setBotao(<ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="white"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+        />)   
+
         if(name !== "" && email !== "" && password !== "" && password === passwordTwo){
             let informaçoesDeCadastro = {
                 name,
@@ -29,10 +41,18 @@ export default function Cadastro(){
             .then(res => {
                 alert("Cadastrado com sucesso!")
                 navigate("/")
+                setBotao("Cadastrar");
             })
             .catch(err => {
                 alert(err.response.data)
+                setBotao("Cadastrar");
             })
+        }else if(password !== passwordTwo){
+            alert("Senhas diferens")
+            setBotao("Cadastrar");
+        }else{
+            alert("Todos os campos são necessarios!")
+            setBotao("Cadastrar");
         }
     }
 
@@ -45,7 +65,7 @@ export default function Cadastro(){
                 <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}/>
                 <input type="password" placeholder="Confirme a senha" value={passwordTwo} onChange={e => setPasswordTwo(e.target.value)}/>
             </form>
-            <button onClick={cadastrar}>Cadastrar</button>
+            <button onClick={cadastrar}>{botao}</button>
             <Link to="/">
             <p>Já tem uma conta? Entre agora!</p>
             </Link>
@@ -86,14 +106,20 @@ input{
     border-radius: 5px;
     margin-bottom: 13px;
     border: thin;
-    ::placeholder{
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+    padding-left: 15px;
+     ::placeholder{
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
         font-size: 20px;
         line-height: 23px;
         color: #000000;
-        padding-left: 15px;
     }
 }
 button{
@@ -109,6 +135,9 @@ button{
     font-size: 20px;
     line-height: 23px;
     color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 p{
     font-family: 'Raleway';

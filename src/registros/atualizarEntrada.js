@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useState, useEffect } from "react"
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function AtualizarEntrada({token}){
@@ -11,6 +11,7 @@ export default function AtualizarEntrada({token}){
     const navigate = useNavigate();
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
+    const [botao, setBotao] = useState("Atualizar entrada");
     const config = {
         headers:{
             Authorization: `Bearer ${token}`
@@ -32,17 +33,51 @@ export default function AtualizarEntrada({token}){
             })
     }, [])    
 
+    useEffect(() => {
+        const URL = "https://projeto14-mywallet-back-1ct2.onrender.com/status"
+
+        const interval = setInterval(() => {
+            axios.post(URL, {}, config)
+                .then(res => {
+                })
+                .catch(err => {
+                    alert("Sua sessão expirou!");
+                    navigate("/")
+                })
+        }, 5000);
+
+        return () => clearInterval(interval);
+
+    }, [])
+
 
     function salvarEntrada(){
+
+        setBotao(<ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="white"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+        />)    
+
         if(value !== "" && title !== ""){
             const URL = `https://projeto14-mywallet-back-1ct2.onrender.com/registro/${idRegistro}`
             axios.put(URL,{value, title}, config)
             .then(res => {
-                navigate("/registro")
+                navigate("/registro");
+                setBotao("Atualizar entrada");
             })
             .catch(err => {
                 alert(err.response.data);
+                setBotao("Atualizar entrada");
             })
+        }else{
+            alert("Todos os campos são necessarios!")
+            setBotao("Atualizar entrada");
         }
     }
 
@@ -53,7 +88,7 @@ export default function AtualizarEntrada({token}){
                 <input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}/>
                 <input type="text" placeholder="Descrição" value={title} onChange={e => setTitle(e.target.value)}/>
             </form>
-            <button onClick={salvarEntrada}>Atualizar entrada</button>
+            <button onClick={salvarEntrada}>{botao}</button>
         </PaginaEntrada>
     )
 }
@@ -120,5 +155,8 @@ button{
     font-size: 20px;
     line-height: 23px;
     color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 `
